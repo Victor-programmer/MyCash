@@ -1,26 +1,24 @@
+# Usando Python 3.11 para evitar problemas de compatibilidade
+FROM python:3.11-slim  
+
+# Definindo o diretório de trabalho
+WORKDIR /app  
+
+# Instalando dependências do PostgreSQL
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
     python3-dev
 
-
-# Usa a imagem base do Python 3.11 (versão slim para economizar espaço)
-FROM python:3.11-slim
-
-# Define o diretório de trabalho dentro do contêiner
-WORKDIR /app
-
-# Copia o arquivo de dependências para o contêiner
-COPY requirements.txt .
-
-# Instala as dependências do projeto
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia todo o código do projeto para o contêiner
+# Copiando os arquivos do projeto
 COPY . .
 
-# Expõe a porta 8000 (usada pelo Django)
-EXPOSE 8000
+# Instalando as dependências do projeto
+RUN pip install --no-cache-dir -r requirements.txt  
 
-# Comando para rodar o servidor Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Expondo a porta usada pelo Django
+EXPOSE 8000  
+
+# Comando para rodar o servidor Django usando Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "mycash.wsgi:application"]
+
