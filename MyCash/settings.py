@@ -88,12 +88,6 @@ DATABASES = {
 }
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-import dj_database_url
-
-DATABASES = {
-    'default': dj_database_url.config(default='postgres://localhost')
-}
-
 
 
 # Password validation
