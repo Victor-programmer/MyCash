@@ -1,3 +1,9 @@
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    python3-dev
+
+
 # Usa a imagem base do Python 3.11 (versão slim para economizar espaço)
 FROM python:3.11-slim
 
