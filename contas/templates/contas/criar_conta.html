@@ -11,10 +11,21 @@
     <div class="container mt-5">
         <h1 class="text-center mb-4">Criar Nova Conta</h1>
 
+        <!-- Exibe mensagens de erro ou sucesso -->
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="text-align: center; background-color: rgb(137, 2, 2);color: white;  align-items: center;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="card">
             <div class="card-body">
                 <form method="POST" action="{% url 'criar_conta' %}">
-                    {% csrf_token %}
+                    {% csrf_token %}  <!-- Token CSRF adicionado aqui -->
                     <div class="mb-3">
                         <label for="banco" class="form-label">Banco</label>
                         <select class="form-select" id="banco" name="banco" required>

@@ -32,6 +32,9 @@ ALLOWED_HOSTS = [
     "localhost"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://mycash-production.up.railway.app',
+]
 
 # Application definition
 
@@ -88,7 +91,9 @@ DATABASES = {
 }
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-
+# Configurações para cookies seguros
+SESSION_COOKIE_SECURE = True  # Envia cookies apenas por HTTPS
+CSRF_COOKIE_SECURE = True     # Envia cookies CSRF apenas por HTTPS
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
