@@ -1,22 +1,22 @@
-# Usando Python 3.11 para evitar problemas de compatibilidade
+# Usar uma imagem do Python 3.11 Slim para um ambiente leve e otimizado
 FROM python:3.11-slim  
 
-# Definindo o diretório de trabalho
+# Definir o diretório de trabalho dentro do contêiner
 WORKDIR /app  
 
-# Instalando dependências do PostgreSQL
+# Instalar dependências do PostgreSQL necessárias para o psycopg2
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
     python3-dev
 
-# Copiando os arquivos do projeto
+# Copiar os arquivos do projeto para o contêiner
 COPY . .
 
-# Instalando as dependências do projeto
+# Instalar as dependências do projeto Django
 RUN pip install --no-cache-dir -r requirements.txt  
 
-# Expondo a porta usada pelo Django
+# Expor a porta que o Django usará (8000)
 EXPOSE 8000  
 
 # Comando para rodar o servidor Django usando Gunicorn
