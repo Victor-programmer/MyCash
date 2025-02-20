@@ -87,9 +87,9 @@ def transferir_saldo_view(request):
     return redirect('index')  # Redireciona para a página principal
 
 
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
-from .models import Conta
+from .models import Conta, Historico, Tipos  # Certifique-se de importar o modelo Historico e Tipos
 
 def movimentar_dinheiro_view(request):
     if request.method == 'POST':
@@ -111,7 +111,17 @@ def movimentar_dinheiro_view(request):
             else:  # Se for "ENTRADA"
                 conta.valor += valor
             
+            # Salva a alteração no valor da conta
             conta.save()
+
+            # Registra a movimentação no histórico
+            Historico.objects.create(
+                conta=conta,
+                tipo=tipo,
+                valor=valor,
+                motivo=motivo
+            )
+
             messages.success(request, 'Movimentação realizada com sucesso.')
 
     return redirect('index')  # Redireciona para a página principal
@@ -157,14 +167,21 @@ def index(request):
         'total_contas': total_contas,
         'grafico': grafico
     })
+
 from django.shortcuts import render
 from .models import Historico
-from datetime import datetime, timedelta
-from django.utils import timezone
+from datetime import datetime
+from django.db.models import F
 
 def buscar_historico_entre_datas(data_inicio, data_fim):
-    """ Filtra transações entre datas específicas """
-    return Historico.objects.filter(data__range=[data_inicio, data_fim])
+    """
+    Filtra transações entre datas específicas, ignorando o horário.
+    Usa uma abordagem compatível com SQLite.
+    """
+    return Historico.objects.extra(
+        where=["DATE(data) BETWEEN %s AND %s"],
+        params=[data_inicio, data_fim]
+    )
 
 def historico_view(request):
     historico = Historico.objects.none()  # QuerySet vazio inicialmente
@@ -175,24 +192,16 @@ def historico_view(request):
 
         if data_inicio and data_fim:
             try:
-                # Converte as datas de string para formato correto
+                # Converte as datas de string para objetos date
                 data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d").date()
                 data_fim = datetime.strptime(data_fim, "%Y-%m-%d").date()
 
-                # Adiciona um dia à data_fim para incluir transações no próprio dia
-                data_fim += timedelta(days=1)
-
-                # Converte as datas para datetime com fuso horário
-                data_inicio = timezone.make_aware(datetime.combine(data_inicio, datetime.min.time()))
-                data_fim = timezone.make_aware(datetime.combine(data_fim, datetime.min.time()))
-
-                # Chama a função de filtragem
+                # Filtra as transações entre as datas (ignorando o horário)
                 historico = buscar_historico_entre_datas(data_inicio, data_fim)
             
                 print("Consulta SQL gerada:", historico.query)
-            except ValueError:
+            except ValueError as e:
                 # Caso haja erro na conversão, mantém o QuerySet vazio
-                pass
+                print(f"Erro ao converter datas: {e}")
 
     return render(request, "contas/historico.html", {"historico": historico})
-    

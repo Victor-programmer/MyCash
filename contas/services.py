@@ -41,18 +41,22 @@ def transferir_saldo(conta_saida_id, conta_entrada_id, valor, motivo):
     conta_entrada.valor += valor
 
     # Registra a transferência no histórico
+    from django.utils import timezone
+
     Historico.objects.create(
-        conta=conta_saida,
+            conta=conta_saida,
         tipo=Tipos.SAIDA,
         valor=valor,
-        motivo=f"Transferência para {conta_entrada.banco}: {motivo}"
-    )
+        motivo=f"Transferência para {conta_entrada.banco}: {motivo}",
+        data=timezone.now()  # Defina a data manualmente
+)
     Historico.objects.create(
         conta=conta_entrada,
         tipo=Tipos.ENTRADA,
         valor=valor,
-        motivo=f"Transferência de {conta_saida.banco}: {motivo}"
-    )
+        motivo=f"Transferência de {conta_saida.banco}: {motivo}",
+        data=timezone.now()  # Defina a data manualmente
+)
 
     conta_saida.save()
     conta_entrada.save()
@@ -86,6 +90,8 @@ def total_contas():
     """
     contas_ativas = Conta.objects.filter(status=Status.ATIVO)
     return sum(conta.valor for conta in contas_ativas)
+
+from django.utils import timezone
 
 def buscar_historico_entre_datas(data_inicio, data_fim):
     """
