@@ -23,38 +23,36 @@
             <button type="submit" class="btn btn-primary w-100">Filtrar</button>
         </div>
     </form>
-    
 
     <h2 class="mt-4 text-center">Resultados</h2>
-<table class="table table-striped mt-3">
-    <thead>
-        <tr>
-            <th>Data</th>
-            <th>Conta</th>
-            <th>Tipo</th>
-            <th>Motivo</th>
-            <th>Valor</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if historico %}
-            {% for transacao in historico %}
+    <table class="table table-striped mt-3">
+        <thead>
             <tr>
-                <td>{{ transacao.data|date:"d/m/Y" }}</td>
-                <td>{{ transacao.conta.banco }}</td>
-                <td>{{ transacao.tipo }}</td>
-                <td>{{ transacao.motivo }}</td>
-                <td>R$ {{ transacao.valor }}</td>
+                <th>Data</th>
+                <th>Conta</th>
+                <th>Tipo</th>
+                <th>Motivo</th>
+                <th>Valor</th>
             </tr>
-            {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="5" class="text-center">Nenhuma transação encontrada no período selecionado.</td>
-            </tr>
-        {% endif %}
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+            {% if historico %}
+                {% for transacao in historico %}
+                <tr>
+                    <td>{{ transacao.data|date:"d/m/Y" }}</td>
+                    <td>{{ transacao.conta.banco }}</td>
+                    <td>{{ transacao.tipo }}</td>
+                    <td>{{ transacao.motivo }}</td>
+                    <td>R$ {{ transacao.valor }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">Nenhuma transação encontrada no período selecionado.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 
 </body>
 </html>

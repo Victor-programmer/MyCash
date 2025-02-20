@@ -166,7 +166,7 @@ def buscar_historico_entre_datas(data_inicio, data_fim):
     return Historico.objects.filter(data__date__range=[data_inicio, data_fim])
 
 def historico_view(request):
-    historico = None  # Inicializa a variável vazia
+    historico = Historico.objects.none()  # QuerySet vazio inicialmente
 
     if request.method == "POST":
         data_inicio = request.POST.get("data_inicio")
@@ -181,6 +181,7 @@ def historico_view(request):
                 # Chama a função de filtragem
                 historico = buscar_historico_entre_datas(data_inicio, data_fim)
             except ValueError:
-                historico = None  # Caso haja erro na conversão, não retorna nada
+                # Caso haja erro na conversão, mantém o QuerySet vazio
+                pass
 
     return render(request, "contas/historico.html", {"historico": historico})

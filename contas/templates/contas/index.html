@@ -13,7 +13,7 @@
     {% if messages %}
     <div class="alert-container">
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" style="text-align: center; background-color: rgb(137, 2, 2);color: white;  align-items: center;">
+            <div class="alert alert-{{ message.tags }}" style="text-align: center; color: white;  align-items: center;">
                 {{ message }}
             </div>
         {% endfor %}
