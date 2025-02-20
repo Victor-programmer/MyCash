@@ -39,7 +39,7 @@
             {% if historico %}
                 {% for transacao in historico %}
                 <tr>
-                    <td>{{ transacao.data|date:"d/m/Y" }}</td>
+                    <td>{{ transacao.data|date:"d/m/Y H:i" }}</td>  <!-- Adicionado H:i para exibir hora e minuto -->
                     <td>{{ transacao.conta.banco }}</td>
                     <td>{{ transacao.tipo }}</td>
                     <td>{{ transacao.motivo }}</td>

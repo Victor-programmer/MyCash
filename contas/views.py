@@ -159,11 +159,11 @@ def index(request):
     })
 from django.shortcuts import render
 from .models import Historico
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def buscar_historico_entre_datas(data_inicio, data_fim):
     """ Filtra transações entre datas específicas """
-    return Historico.objects.filter(data__date__range=[data_inicio, data_fim])
+    return Historico.objects.filter(data__range=[data_inicio, data_fim])
 
 def historico_view(request):
     historico = Historico.objects.none()  # QuerySet vazio inicialmente
@@ -177,6 +177,9 @@ def historico_view(request):
                 # Converte as datas de string para formato correto
                 data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d").date()
                 data_fim = datetime.strptime(data_fim, "%Y-%m-%d").date()
+
+                # Adiciona um dia à data_fim para incluir transações no próprio dia
+                data_fim += timedelta(days=1)
 
                 # Chama a função de filtragem
                 historico = buscar_historico_entre_datas(data_inicio, data_fim)
