@@ -160,6 +160,7 @@ def index(request):
 from django.shortcuts import render
 from .models import Historico
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 def buscar_historico_entre_datas(data_inicio, data_fim):
     """ Filtra transações entre datas específicas """
@@ -181,10 +182,17 @@ def historico_view(request):
                 # Adiciona um dia à data_fim para incluir transações no próprio dia
                 data_fim += timedelta(days=1)
 
+                # Converte as datas para datetime com fuso horário
+                data_inicio = timezone.make_aware(datetime.combine(data_inicio, datetime.min.time()))
+                data_fim = timezone.make_aware(datetime.combine(data_fim, datetime.min.time()))
+
                 # Chama a função de filtragem
                 historico = buscar_historico_entre_datas(data_inicio, data_fim)
+            
+                print("Consulta SQL gerada:", historico.query)
             except ValueError:
                 # Caso haja erro na conversão, mantém o QuerySet vazio
                 pass
 
     return render(request, "contas/historico.html", {"historico": historico})
+    

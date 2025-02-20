@@ -13,7 +13,7 @@
     {% if messages %}
     <div class="alert-container">
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" style="text-align: center; background-color: rgb(148, 29, 29); color: white;  align-items: center; height: 60px;">
+            <div class="alert alert-{{ message.tags }}" style="text-align: center;  color: rgb(0, 0, 0);  align-items: center; height: 60px;">
                 {{ message }}
             </div>
         {% endfor %}
@@ -55,10 +55,7 @@
                 </table>
             </div>
         </div>
-        <div class="text-center" style="margin-bottom: 20px;">
-            <a href="{% url 'criar_conta' %}" class="btn btn-success">Criar Nova Conta</a>
-        </div>
-    </div>
+
         <div class="card mb-4">
             <div class="card-header">
                 <h2>Total de Contas</h2>
@@ -153,7 +150,10 @@
         </div>
 
         <!-- Botão para Criar Nova Conta -->
-        
+        <div class="text-center" style="margin-bottom: 20px;">
+            <a href="{% url 'criar_conta' %}" class="btn btn-success">Criar Nova Conta</a>
+        </div>
+    </div>
 
     <!-- Bootstrap JS e dependências -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
