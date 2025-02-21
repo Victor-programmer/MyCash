@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento de Contas</title>
-    <!-- Bootstrap CSS -->
-    <!-- Lumen do Bootswatch -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.0/lumen/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -13,7 +11,7 @@
     {% if messages %}
     <div class="alert-container">
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" style="text-align: center;  color: rgb(0, 0, 0);  align-items: center; height: 60px;">
+            <div class="alert alert-{{ message.tags }}" style="text-align: center; color: rgb(0, 0, 0); align-items: center; height: 60px;">
                 {{ message }}
             </div>
         {% endfor %}
@@ -22,7 +20,10 @@
 
     <div class="container mt-5">
         <h1 class="text-center mb-4">Gerenciamento de Contas</h1>
-    
+
+        <!-- Botão para Criar Nova Conta -->
+        
+
         <!-- Seção: Listagem de Contas -->
         <div class="card mb-4">
             <div class="card-header">
@@ -54,8 +55,12 @@
                     </tbody>
                 </table>
             </div>
+            <div class="text-center mb-4">
+                <a href="{% url 'criar_conta' %}" class="btn btn-success">Criar Nova Conta</a>
+            </div>
         </div>
 
+        <!-- Seção: Total de Contas -->
         <div class="card mb-4">
             <div class="card-header">
                 <h2>Total de Contas</h2>
@@ -77,7 +82,7 @@
             </div>
             <div class="card-body">
                 <form method="POST" action="{% url 'transferir_saldo' %}">
-                    {% csrf_token %}  <!-- Token CSRF adicionado aqui -->
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="conta_saida" class="form-label">Conta de Saída</label>
                         <select class="form-select" id="conta_saida" name="conta_saida" required>
@@ -110,7 +115,7 @@
             </div>
             <div class="card-body">
                 <form method="POST" action="{% url 'movimentar_dinheiro' %}">
-                    {% csrf_token %}  <!-- Token CSRF adicionado aqui -->
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label for="conta_id" class="form-label">Conta</label>
                         <select class="form-select" id="conta_id" name="conta_id" required>
@@ -147,11 +152,6 @@
             <div class="card-body text-center">
                 <img src="{{ grafico }}" class="img-fluid rounded" alt="Gráfico de Saldos">
             </div>
-        </div>
-
-        <!-- Botão para Criar Nova Conta -->
-        <div class="text-center" style="margin-bottom: 20px;">
-            <a href="{% url 'criar_conta' %}" class="btn btn-success">Criar Nova Conta</a>
         </div>
     </div>
 
